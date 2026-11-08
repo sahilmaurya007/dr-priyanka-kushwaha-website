@@ -83,6 +83,16 @@ section.alt{background:var(--bg2)}
 .btn-sm:hover{background:var(--accent);color:#fff}
 .edu-inst{font-weight:700}
 .edu-score{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--accent);font-weight:600}
+/* journey timeline */
+.tl{position:relative;padding-left:26px;max-width:760px}
+.tl::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--grad-btn);border-radius:2px;opacity:.55}
+.tl-item{position:relative;padding:0 0 24px 8px}
+.tl-dot{position:absolute;left:-26px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent);z-index:2}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);letter-spacing:.06em}
+.tl-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;box-shadow:var(--shadow);margin-top:6px}
+.tl-card h3{font-size:1rem;margin-bottom:4px}
+.tl-card p{font-size:.86rem;color:var(--muted)}
+.tl-cat{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:2px 10px;border-radius:999px;background:var(--soft);border:1px solid var(--border);color:var(--muted);margin-bottom:6px}
 .gal-item{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
 .gal-item .gal-media{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--soft)}
 .gal-item .gal-media img{width:100%;height:100%;object-fit:contain;display:block}
@@ -116,7 +126,7 @@ footer{border-top:1px solid var(--border);background:var(--bg2);padding:26px 0 1
     </a>
     <button class="icon-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
     <div class="nav-links" id="navLinks">
-      <a href="#about">About</a><a href="#contact">Contact</a><a href="#education">Education</a><a href="#publications">Publications</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#gallery">Gallery</a><a href="#references">References</a>
+      <a href="#about">About</a><a href="#contact">Contact</a><a href="#education">Education</a><a href="#publications">Publications</a><a href="#projects">Projects</a><a href="#journey">Journey</a><a href="#skills">Skills</a><a href="#awards">Awards</a><a href="#gallery">Gallery</a><a href="#references">References</a>
     </div>
     <button class="icon-btn" id="themeBtn" aria-label="Choose theme" title="Choose theme">🌙</button>
   </nav>
@@ -179,23 +189,35 @@ footer{border-top:1px solid var(--border);background:var(--bg2);padding:26px 0 1
     <div class="grid g2" id="projGrid"></div>
   </div>
 </section>
-<section id="skills">
+<section id="journey">
   <div class="wrap">
-    <div class="section-head reveal"><p class="kicker">06 · Expertise</p><h2>Technical skills</h2><div class="rule"></div></div>
+    <div class="section-head reveal"><p class="kicker">06 · The journey</p><h2>Research journey</h2><div class="rule"></div></div>
+    <div class="tl" id="tlList"></div>
+  </div>
+</section>
+<section id="skills" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal"><p class="kicker">07 · Expertise</p><h2>Technical skills</h2><div class="rule"></div></div>
     <div class="grid g2" id="skillsGrid"></div>
+  </div>
+</section>
+<section id="awards">
+  <div class="wrap">
+    <div class="section-head reveal"><p class="kicker">08 · Recognition</p><h2>Achievements &amp; Awards</h2><div class="rule"></div></div>
+    <div class="grid g2" id="awardGrid"></div>
   </div>
 </section>
 <section id="gallery" class="alt">
   <div class="wrap">
-    <div class="section-head reveal"><p class="kicker">07 · Moments</p><h2>Gallery</h2><div class="rule"></div></div>
+    <div class="section-head reveal"><p class="kicker">09 · Moments</p><h2>Gallery</h2><div class="rule"></div></div>
     <div class="gal g4" id="photoGal"></div>
-    <div id="catTabs"></div>
-    <div class="gal g4" id="catGal"></div>
+    <div id="catTabs" style="margin-top:18px"></div>
+    <div class="gal g4" id="catGal" style="margin-top:14px"></div>
   </div>
 </section>
 <section id="references">
   <div class="wrap">
-    <div class="section-head reveal"><p class="kicker">08 · Endorsements</p><h2>References</h2><div class="rule"></div></div>
+    <div class="section-head reveal"><p class="kicker">10 · Endorsements</p><h2>References</h2><div class="rule"></div></div>
     <div class="grid g3" id="refGrid"></div>
   </div>
 </section>
@@ -221,12 +243,14 @@ footer{border-top:1px solid var(--border);background:var(--bg2);padding:26px 0 1
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <span class="foot-sym" title="Science & Soul">༺ 🧬 ✒️ ༻</span></div>
+      <span class="foot-sym" title="Science &amp; Soul">༺ 🧬 ✒️ ༻</span></div>
     </div>
     <div class="copyright"><span id="footCopy"></span><span id="footUpd"></span></div>
   </div>
 </footer>
-<script src="data.js?v=1"></script>
-<script src="app.js?v=1"></script>
+<script src="data1.js?v=2"></script>
+<script src="data2.js?v=2"></script>
+<script src="data3.js?v=2"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>

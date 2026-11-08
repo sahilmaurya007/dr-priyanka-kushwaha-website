@@ -1,6 +1,6 @@
 /* ============================================================
    RENDERER (app.js) — Dr. Priyanka Kushwaha website.
-   Content data.js se aata hai.
+   Content data1/data2/data3.js se aata hai.
    ============================================================ */
 (function () {
   "use strict";
@@ -17,15 +17,17 @@
   const setTheme = (t) => {
     document.documentElement.setAttribute("data-theme", t);
     try { localStorage.setItem("pk-theme", t); } catch (e) {}
-    document.getElementById("themeBtn").textContent = t === "night" ? "☀️" : "🌙";
+    $("themeBtn").textContent = t === "night" ? "☀️" : "🌙";
+    let st = document.getElementById("nightStyle");
     if (t === "night") {
-      const st = document.createElement("style");
-      st.id = "nightStyle";
-      st.textContent = ":root{--bg:#12131a;--bg2:#181a24;--card:#1d2030;--soft:#262a3d;--text:#e8eaf3;--muted:#9aa0b5;--border:#2c3046}";
-      document.head.appendChild(st);
-    } else {
-      const st = document.getElementById("nightStyle");
-      if (st) st.remove();
+      if (!st) {
+        st = document.createElement("style");
+        st.id = "nightStyle";
+        document.head.appendChild(st);
+      }
+      st.textContent = ":root{--bg:#12131a;--bg2:#181a24;--card:#1d2030;--soft:#262a3d;--text:#e8eaf3;--muted:#9aa0b5;--border:#2c3046;--shadow:0 6px 22px rgba(0,0,0,.35)}";
+    } else if (st) {
+      st.remove();
     }
   };
   let curTheme = "light";
@@ -39,8 +41,8 @@
   $("heroTags").innerHTML = PROFILE.tagline.split(" · ").map(t =>
     `<span class="chip">${esc(t)}</span>`).join("");
 
-  const linkedin = (PROFILE.links || []).find(l => /linkedin/i.test(l.label));
-  if (linkedin && linkedin.url) $("heroLinkedInBtn").href = linkedin.url;
+  const linkedin = (PROFILE.links || []).find(l => /linkedin/i.test(l.label) && l.url);
+  if (linkedin) $("heroLinkedInBtn").href = linkedin.url;
   else $("heroLinkedInBtn").style.display = "none";
 
   const mail = PROFILE.email || PROFILE.emailAlt;
@@ -49,7 +51,6 @@
     $("heroMailBtn").href = "mailto:" + mail;
   }
 
-  /* profile photo: fallback to initials */
   const photo = $("heroPhoto");
   photo.alt = PROFILE.name;
   photo.addEventListener("error", () => {
@@ -65,11 +66,11 @@
     <h3 style="margin-bottom:12px">Quick info</h3>
     ${mail ? `<div style="margin-bottom:8px;font-size:.86rem"><span class="muted">Email:</span><br><a href="mailto:${esc(mail)}">${esc(mail)}</a></div>` : ""}
     <div style="margin-bottom:8px;font-size:.86rem"><span class="muted">Location:</span><br>${esc(PROFILE.currentAddress)}</div>
-    ${PROFILE.links && PROFILE.links.length ? `<div style="font-size:.86rem"><span class="muted">Connect:</span><br>${PROFILE.links.filter(l => l.url).map(l =>
+    ${PROFILE.inLabSince ? `<div style="margin-bottom:8px;font-size:.86rem"><span class="muted">Since:</span><br>${esc(PROFILE.inLabSince)}</div>` : ""}
+    ${(PROFILE.links || []).filter(l => l.url).length ? `<div style="font-size:.86rem"><span class="muted">Connect:</span><br>${PROFILE.links.filter(l => l.url).map(l =>
       `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(" · ")}</div>` : ""}
   `;
 
-  /* ---------- Connect links: symbol pill-boxes ---------- */
   const linkIco = (label) => {
     const l = String(label || "").toLowerCase();
     if (/scholar/.test(l))  return "🎓";
@@ -85,7 +86,6 @@
     `<a class="con-pill" href="${esc(l.url)}" target="_blank" rel="noopener">` +
     `<span class="con-pill-ico">${linkIco(l.label)}</span>${esc(l.label)}</a>`).join("");
 
-  /* ---------- Location card: live Google Maps embed (UKZN, Durban) ---------- */
   const mapEmbed = `
     <div class="loc-map">
       <iframe class="loc-map-iframe"
@@ -145,14 +145,32 @@
       <p class="note">${esc(p.note)}</p>
     </article>`).join("");
 
+  $("tlList").innerHTML = (JOURNEY || []).map(j => `
+    <div class="tl-item">
+      <span class="tl-dot"></span>
+      <span class="tl-date">${esc(j.date)}</span>
+      <div class="tl-card">
+        ${j.cat ? `<span class="tl-cat">${esc(j.cat)}</span>` : ""}
+        <h3>${esc(j.title)}</h3>
+        <p>${esc(j.text)}</p>
+      </div>
+    </div>`).join("");
+
   $("skillsGrid").innerHTML = SKILLS.map(s => `
     <div class="card skill-cat">
       <h3>${esc(s.category)}</h3>
       <div class="pill-row">${s.items.map(t => `<span class="pill">${esc(t)}</span>`).join("")}</div>
     </div>`).join("");
 
-  /* gallery: single photos + categorized albums */
-  const gal = (items) => items.map(g => {
+  $("awardGrid").innerHTML = (AWARDS || []).map(a => `
+    <article class="card">
+      <h3>${esc(a.title)}</h3>
+      <p class="muted">${esc(a.issuer)}</p>
+      ${a.date ? `<span class="edu-score">${esc(a.date)}</span>` : ""}
+      ${a.note ? `<p class="note">${esc(a.note)}</p>` : ""}
+    </article>`).join("");
+
+  const gal = (items) => (items || []).map(g => {
     const cap = g.src
       ? `<figcaption class="gal-cap">${esc(g.caption)}</figcaption>`
       : `<span class="muted">${esc(g.caption)}</span>`;
@@ -167,7 +185,7 @@
   let activeCat = GALLERY_CATEGORIES.length ? GALLERY_CATEGORIES[0].name : "";
   const renderCatTabs = () => {
     $("catTabs").innerHTML = GALLERY_CATEGORIES.map(c =>
-      `<button class="pill${c.name === activeCat ? "" : ""}" data-name="${esc(c.name)}" style="cursor:pointer;background:${c.name === activeCat ? "var(--grad-btn)" : "var(--soft)"};color:${c.name === activeCat ? "#fff" : "var(--muted)"}">${esc(c.name)}</button>`).join(" ");
+      `<button class="pill" data-name="${esc(c.name)}" style="cursor:pointer;background:${c.name === activeCat ? "var(--grad-btn)" : "var(--soft)"};color:${c.name === activeCat ? "#fff" : "var(--muted)"}">${esc(c.name)}</button>`).join(" ");
     document.querySelectorAll("#catTabs .pill").forEach(t =>
       t.addEventListener("click", () => { activeCat = t.dataset.name; renderCatTabs(); renderCatGal(); }));
   };
@@ -190,7 +208,6 @@
   $("quoteText").textContent = QUOTE.text;
   $("quoteBy").textContent = QUOTE.by;
 
-  /* ---------- Footer ---------- */
   const mapQ = encodeURIComponent("University of KwaZulu-Natal, Durban, South Africa");
   $("footAddr").innerHTML =
     `${esc(PROFILE.currentAddress)}<br>` +
